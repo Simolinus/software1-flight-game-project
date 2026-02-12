@@ -1,0 +1,7 @@
+[project]
+name = "flight-game"
+requires-python = ">=3.9,<3.10"
+dependencies = [
+    "mariadb",
+    "geopy",
+]
