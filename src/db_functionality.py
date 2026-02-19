@@ -27,6 +27,28 @@ def get_distance_between_airports(connection, icao, icao2):
     return distance_between_airports
 
 
+def airport_locations(connection):
+    sql = "SELECT latitude_deg, longitude_deg FROM airport"
+    cursor = connection.cursor()
+    cursor.execute(
+        sql,
+    )
+    result = cursor.fetchall()
+    cursor.close()
+    return result
+
+
+def get_player_location(connection):
+    sql = "SELECT latitude_deg, longitude_deg FROM airport INNER JOIN game ON airport.ident = game.location WHERE screen_name = screen_name"
+    cursor = connection.cursor()
+    cursor.execute(
+        sql,
+    )
+    result = cursor.fetchall()
+    cursor.close()
+    return result
+
+
 def get_airports(connection):
     sql = "SELECT airport.ident, airport.name, country.name FROM airport, country"
     cursor = connection.cursor()
@@ -45,5 +67,20 @@ def create_player(connection, player_name):
     cursor.close()
 
 
-def start_new_game():
-    sql = "DELETE FROM game, goal_reached"
+def start_new_game(connection):
+    sql = "DELETE FROM game"
+    sql2 = "DELETE FROM goal_reached"
+    cursor = connection.cursor()
+    cursor.execute(sql, sql2)
+    cursor.close()
+
+
+def check_for_players(connection):
+    sql = "SELECT screen_name from game"
+    cursor = connection.cursor()
+    cursor.execute(
+        sql,
+    )
+    result = cursor.fetchone()
+    cursor.close()
+    return result[0]
