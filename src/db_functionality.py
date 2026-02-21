@@ -69,9 +69,16 @@ def create_player(connection, player_name):
 
 def start_new_game(connection):
     sql = "DELETE FROM game"
-    sql2 = "DELETE FROM goal_reached"
+    sql = "DELETE FROM goal_reached"
     cursor = connection.cursor()
-    cursor.execute(sql, sql2)
+    cursor.execute(
+        sql,
+    )
+    sql = "DELETE FROM goal_reached"
+    cursor = connection.cursor()
+    cursor.execute(
+        sql,
+    )
     cursor.close()
 
 
