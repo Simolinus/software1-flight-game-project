@@ -39,7 +39,7 @@ def airport_locations(connection):
 
 
 def get_player_location(connection):
-    sql = "SELECT latitude_deg, longitude_deg FROM airport INNER JOIN game ON airport.ident = game.location WHERE screen_name = screen_name"
+    sql = "SELECT latitude_deg, longitude_deg FROM airport INNER JOIN player ON airport.ident = player.location WHERE screen_name = screen_name"
     cursor = connection.cursor()
     cursor.execute(
         sql,
