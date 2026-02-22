@@ -61,20 +61,24 @@ def get_airports(connection):
 
 
 def create_player(connection, player_name):
-    sql = "INSERT INTO game (screen_name, location) VALUES (?, ?)"
+    sql = "INSERT INTO player (money, screen_name, location) VALUES (?, ?, ?)"
     cursor = connection.cursor()
-    cursor.execute(sql, (player_name, "EFHK"))
+    cursor.execute(sql, (1000, player_name, "EFHK"))
     cursor.close()
 
 
 def start_new_game(connection):
-    sql = "DELETE FROM game"
-    sql = "DELETE FROM goal_reached"
+    sql = "DELETE FROM player"
     cursor = connection.cursor()
     cursor.execute(
         sql,
     )
-    sql = "DELETE FROM goal_reached"
+    sql = "UPDATE puzzle_pieces SET acquired = DEFAULT;"
+    cursor = connection.cursor()
+    cursor.execute(
+        sql,
+    )
+    sql = "UPDATE quizzes SET answered = DEFAULT;"
     cursor = connection.cursor()
     cursor.execute(
         sql,
@@ -83,11 +87,13 @@ def start_new_game(connection):
 
 
 def check_for_players(connection):
-    sql = "SELECT screen_name from game"
+    sql = "SELECT screen_name from player"
     cursor = connection.cursor()
     cursor.execute(
         sql,
     )
     result = cursor.fetchone()
     cursor.close()
+    if not result:
+        return None
     return result[0]
