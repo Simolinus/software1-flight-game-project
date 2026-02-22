@@ -1,7 +1,10 @@
 CREATE DATABASE IF NOT EXISTS flight_game;
 USE flight_game;
 
+<<<<<<< HEAD
 -- 先清空表（可选，避免重复插入）
+=======
+>>>>>>> b8389d2 (Add 711 items of quizzeswq)
 DROP TABLE IF EXISTS quizzes;
 CREATE TABLE IF NOT EXISTS quizzes (
     id INT AUTO_INCREMENT PRIMARY KEY,
@@ -11,7 +14,10 @@ CREATE TABLE IF NOT EXISTS quizzes (
 );
 
 INSERT INTO quizzes (question, answer, reward) VALUES
+<<<<<<< HEAD
 -- 原有去重后的基础题目（198条）
+=======
+>>>>>>> b8389d2 (Add 711 items of quizzeswq)
 ('What is the capital of Italy?', 'Rome', 100),
 ('What is the capital of France?', 'Paris', 100),
 ('What is the capital of Germany?', 'Berlin', 100),
@@ -261,8 +267,11 @@ INSERT INTO quizzes (question, answer, reward) VALUES
 ('In which year did the first man orbit the Earth?', '1961', 100),
 ('How many players are there in a cricket team?', '11', 100),
 ('How many moons does Earth have?', '1', 100),
+<<<<<<< HEAD
 
 -- 新增802条题目，补充至1000条
+=======
+>>>>>>> b8389d2 (Add 711 items of quizzeswq)
 ('What is the capital of Canada?', 'Ottawa', 100),
 ('What is the capital of the United States?', 'Washington D.C.', 100),
 ('What is the capital of Mexico?', 'Mexico City', 100),
