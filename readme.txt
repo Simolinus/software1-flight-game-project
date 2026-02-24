@@ -1,4 +1,4 @@
--- sql querys for database:
+-- sql queries for database:
 
 DELETE FROM airport
 WHERE
