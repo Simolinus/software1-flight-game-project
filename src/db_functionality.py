@@ -9,7 +9,7 @@ def connect_to_database():
         port=3306,
         user="user",
         password="password",
-        database="flight_game",
+        database="skyquest",
         autocommit=True,
     )
     return connection
