@@ -14,8 +14,10 @@ def airports_in_player_range():
 
 def main():
     connection = connect_to_database()
+    start_new_game(connection)
     existing_players = check_for_players(connection)
     if not existing_players:
+        randomize_puzzle_piece_location(connection)
         player_name = input("Enter player name: ")
         create_player(connection, player_name)
         print(f"Hello {player_name}")
