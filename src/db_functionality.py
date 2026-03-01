@@ -1,4 +1,5 @@
 import mariadb
+import random
 import geopy
 from geopy import distance
 
@@ -68,18 +69,20 @@ def create_player(connection, player_name):
 
 
 def start_new_game(connection):
+    cursor = connection.cursor()
     sql = "DELETE FROM player"
-    cursor = connection.cursor()
     cursor.execute(
         sql,
     )
-    sql = "UPDATE puzzle_pieces SET acquired = DEFAULT;"
-    cursor = connection.cursor()
+    sql = "UPDATE puzzle_pieces SET acquired = DEFAULT"
     cursor.execute(
         sql,
     )
-    sql = "UPDATE quizzes SET answered = DEFAULT;"
-    cursor = connection.cursor()
+    sql = "UPDATE quizzes SET answered = DEFAULT"
+    cursor.execute(
+        sql,
+    )
+    sql = "UPDATE airport SET puzzle_piece = DEFAULT"
     cursor.execute(
         sql,
     )
@@ -97,3 +100,39 @@ def check_for_players(connection):
     if not result:
         return None
     return result[0]
+
+
+def airports_id(connection):
+    sql = "SELECT id FROM airport WHERE NOT id = '2307'"
+    cursor = connection.cursor()
+    cursor.execute(
+        sql,
+    )
+    airports = cursor.fetchall()
+    cursor.close()
+    return airports
+
+
+def puzzle_pieces_id(connection):
+    sql = "SELECT id FROM puzzle_pieces"
+    cursor = connection.cursor()
+    cursor.execute(
+        sql,
+    )
+    puzzle_pieces = cursor.fetchall()
+    cursor.close()
+    return puzzle_pieces
+
+
+def randomize_puzzle_piece_location(connection):
+    cursor = connection.cursor()
+    airports = airports_id(connection)
+    random_airports = random.sample(airports, 10)
+    puzzle_pieces = puzzle_pieces_id(connection)
+    random.shuffle(puzzle_pieces)
+    for i in range(10):
+        puzzle_piece_id = puzzle_pieces[i][0]
+        airport_id = random_airports[i][0]
+        sql = "UPDATE airport SET puzzle_piece = ? WHERE id = ?"
+        cursor.execute(sql, (puzzle_piece_id, airport_id))
+    cursor.close()
