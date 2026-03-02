@@ -2,6 +2,7 @@ import mariadb
 import random
 import geopy
 from geopy import distance
+from geopy.distance import geodesic
 
 
 def connect_to_database():
@@ -87,6 +88,7 @@ def start_new_game(connection):
         sql,
     )
     cursor.close()
+    randomize_puzzle_piece_location(connection)
 
 
 def check_for_players(connection):
@@ -136,3 +138,33 @@ def randomize_puzzle_piece_location(connection):
         sql = "UPDATE airport SET puzzle_piece = ? WHERE id = ?"
         cursor.execute(sql, (puzzle_piece_id, airport_id))
     cursor.close()
+
+
+def airports_in_player_range():
+    connection = connect_to_database()
+    player_location = get_player_location(connection)
+    airports_location = airport_locations(connection)
+    distances = [geodesic(player_location, airport).km for airport in airports_location]
+    print(distances)
+
+
+def check_for_puzzle_piece(connection):
+    sql = "SELECT puzzle_piece FROM airport, player WHERE airport.ident = player.location AND puzzle_piece IS NOT null"
+    cursor = connection.cursor()
+    cursor.execute(
+        sql,
+    )
+    result = cursor.fetchone()
+    cursor.close()
+    if not result:
+        return None
+    return result[0]
+
+
+def acquire_puzzle_piece(connection):
+    cursor = connection.cursor()
+    puzzle_piece_at_player = check_for_puzzle_piece(connection)
+    if puzzle_piece_at_player:
+        sql = "UPDATE puzzle_pieces SET acquired = ? WHERE id = ?"
+        cursor.execute(sql, (1, puzzle_piece_at_player))
+    cursor.close
