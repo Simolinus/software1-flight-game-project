@@ -168,3 +168,13 @@ def acquire_puzzle_piece(connection):
         sql = "UPDATE puzzle_pieces SET acquired = ? WHERE id = ?"
         cursor.execute(sql, (1, puzzle_piece_at_player))
     cursor.close
+
+
+def player_location_airport_name(connection):
+    sql = "SELECT ident, country.name, airport.name FROM airport, player, country WHERE airport.ident = player.location AND airport.iso_country = country.iso_country"
+    cursor = connection.cursor()
+    cursor.execute(
+        sql,
+    )
+    location = cursor.fetchone()
+    print(f"Current location: {location[0]}, {location[1]}, {location[2]}")
