@@ -1,4 +1,5 @@
 import mariadb
+import sys
 from db_functionality import *
 
 
@@ -14,8 +15,35 @@ def initialize_game():
         print(f"Hello {existing_players}")
 
 
+def user_input(key, connection):
+    if key == "0":
+        start_new_game(connection)
+        initialize_game()
+    elif key == "4":
+        print("Exiting")
+        sys.exit(0)
+    elif key == "1":
+        print("Available airports:")
+        input("Choose airport: ")
+        return
+    elif key == "2":
+        print("Answer quiz")
+        answer_input = input("Enter answer: ")
+        return
+    elif key == "3":
+        print("Clue is ?")
+        return
+
+
 def main():
     connection = connect_to_database()
+    while True:
+        print(
+            "\n0: Start new game\n1: Travel\n2: Answer quiz\n3: Inspect clue\n4: Exit\n"
+        )
+        player_location_airport_name(connection)
+        user_input_key = input()
+        user_input(user_input_key, connection)
 
 
 if __name__ == "__main__":
