@@ -41,8 +41,9 @@ def main():
         print(
             "\n0: Start new game\n1: Travel\n2: Answer quiz\n3: Inspect clue\n4: Exit\n"
         )
+        current_money(connection)
         player_location_airport_name(connection)
-        user_input_key = input()
+        user_input_key = input("Enter command: ")
         user_input(user_input_key, connection)
 
 
