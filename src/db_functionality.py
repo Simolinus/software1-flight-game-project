@@ -87,6 +87,7 @@ def start_new_game(connection):
     cursor.execute(
         sql,
     )
+    sql = "UPDATE quizzes SET answered = DEFAULT"
     cursor.close()
     randomize_puzzle_piece_location(connection)
 
@@ -188,3 +189,22 @@ def current_money(connection):
     )
     money = cursor.fetchone()
     print(f"Current money: {money[0]}€")
+
+
+def which_quiz(connection):
+    sql = "SELECT id, quiz, answer FROM quizzes WHERE NOT answered = '1'"
+    cursor = connection.cursor()
+    cursor.execute(
+        sql,
+    )
+    quizzes = cursor.fetchall()
+    cursor.close()
+    return quizzes
+
+
+def random_quiz(connection):
+    cursor = connection.cursor
+    quizzes = which_quiz(connection)
+    one_random_quiz = random.sample(quizzes, 1)
+    print(one_random_quiz[0][1])
+    return one_random_quiz[0][2]

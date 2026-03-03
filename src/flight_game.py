@@ -27,8 +27,17 @@ def user_input(key, connection):
         input("Choose airport: ")
         return
     elif key == "2":
-        print("Answer quiz")
-        answer_input = input("Enter answer: ")
+        while True:
+            print("Answer quiz or quit to exit")
+            correct_answer = random_quiz(connection)
+            answer_input = input("Enter answer: ")
+            if answer_input == "quit":
+                break
+            if answer_input == correct_answer:
+                sql = "UPDATE quizzes SET answered = ? WHERE answer = ?"
+                cursor = connection.cursor()
+                cursor.execute(sql, (1, correct_answer))
+                cursor.close()
         return
     elif key == "3":
         print("Clue is ?")
