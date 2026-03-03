@@ -203,8 +203,6 @@ def which_quiz(connection):
 
 
 def random_quiz(connection):
-    cursor = connection.cursor
     quizzes = which_quiz(connection)
     one_random_quiz = random.sample(quizzes, 1)
-    print(one_random_quiz[0][1])
-    return one_random_quiz[0][2]
+    return one_random_quiz
