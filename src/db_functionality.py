@@ -178,3 +178,13 @@ def player_location_airport_name(connection):
     )
     location = cursor.fetchone()
     print(f"Current location: {location[0]}, {location[1]}, {location[2]}")
+
+
+def current_money(connection):
+    sql = "SELECT money FROM player"
+    cursor = connection.cursor()
+    cursor.execute(
+        sql,
+    )
+    money = cursor.fetchone()
+    print(f"Current money: {money[0]}€")
