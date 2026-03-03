@@ -28,16 +28,23 @@ def user_input(key, connection):
         return
     elif key == "2":
         while True:
-            print("Answer quiz or quit to exit")
-            correct_answer = random_quiz(connection)
-            answer_input = input("Enter answer: ")
+            print("\n")
+            print("Answer quiz or quit to exit\n")
+            quiz = random_quiz(connection)
+            correct_answer = quiz[0][2]
+            print(quiz[0][1])
+            quiz_id = quiz[0][0]
+            answer_input = input("Input: ")
             if answer_input == "quit":
                 break
             if answer_input == correct_answer:
-                sql = "UPDATE quizzes SET answered = ? WHERE answer = ?"
+                print("Correct answer!")
+                sql = "UPDATE quizzes SET answered = ? WHERE answer = ? AND id = ?"
                 cursor = connection.cursor()
-                cursor.execute(sql, (1, correct_answer))
+                cursor.execute(sql, (1, correct_answer, quiz_id))
                 cursor.close()
+            else:
+                print("Wrong answer!")
         return
     elif key == "3":
         print("Clue is ?")
