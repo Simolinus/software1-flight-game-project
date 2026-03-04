@@ -23,14 +23,28 @@ def user_input(key, connection):
         print("Exiting")
         sys.exit(0)
     elif key == "1":
+        range = 5000
         print("Available airports:")
-        input("Choose airport: ")
+        print("\n")
+        airports_distance = player_distance_to_airports()
+        for i in airports_distance:
+            if range > int(i[3]):
+                print(f"{i[0]}, {i[1]}, {i[2]}")
+        print("\n")
+        destination = input("Choose destination by ICAO: ").strip().upper()
+        print("\n")
+        sql = f"UPDATE player SET location = '{destination}'"
+        cursor = connection.cursor()
+        cursor.execute(sql)
+        print(f"Arrived at {destination}")
         return
     elif key == "2":
         while True:
-            print("\n")
             print("Answer quiz or quit to exit\n")
             quiz = random_quiz(connection)
+            if not quiz:
+                print("All quizzes answered!")
+                break
             correct_answer = quiz[0][2]
             print(quiz[0][1])
             quiz_id = quiz[0][0]
@@ -38,10 +52,13 @@ def user_input(key, connection):
             if answer_input == "quit":
                 break
             if answer_input == correct_answer:
-                print("Correct answer!")
+                print("Correct answer! +100€")
+                print("\n")
                 sql = "UPDATE quizzes SET answered = ? WHERE answer = ? AND id = ?"
                 cursor = connection.cursor()
                 cursor.execute(sql, (1, correct_answer, quiz_id))
+                sql = "UPDATE player SET money = money + 100"
+                cursor.execute(sql)
                 cursor.close()
             else:
                 print("Wrong answer!")
@@ -60,6 +77,7 @@ def main():
         current_money(connection)
         player_location_airport_name(connection)
         user_input_key = input("Enter command: ")
+        print("\n")
         user_input(user_input_key, connection)
 
 

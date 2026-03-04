@@ -30,7 +30,7 @@ def get_distance_between_airports(connection, icao, icao2):
 
 
 def airport_locations(connection):
-    sql = "SELECT latitude_deg, longitude_deg FROM airport"
+    sql = "SELECT iso_country, name, ident, latitude_deg, longitude_deg FROM airport"
     cursor = connection.cursor()
     cursor.execute(
         sql,
@@ -141,12 +141,16 @@ def randomize_puzzle_piece_location(connection):
     cursor.close()
 
 
-def airports_in_player_range():
+def player_distance_to_airports():
     connection = connect_to_database()
     player_location = get_player_location(connection)
-    airports_location = airport_locations(connection)
-    distances = [geodesic(player_location, airport).km for airport in airports_location]
-    print(distances)
+    airports = airport_locations(connection)
+    player_distance_to_airports = []
+    for airport in airports:
+        iso_country, name, ident, lat, lon = airport
+        distance_km = geodesic(player_location, (lat, lon)).km
+        player_distance_to_airports.append((iso_country, name, ident, distance_km))
+    return player_distance_to_airports
 
 
 def check_for_puzzle_piece(connection):
