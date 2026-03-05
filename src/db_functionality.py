@@ -30,7 +30,7 @@ def get_distance_between_airports(connection, icao, icao2):
 
 
 def airport_locations(connection):
-    sql = "SELECT iso_country, name, ident, latitude_deg, longitude_deg FROM airport"
+    sql = "SELECT iso_country, name, ident, latitude_deg, longitude_deg FROM airport, player WHERE NOT player.location = airport.ident"
     cursor = connection.cursor()
     cursor.execute(
         sql,
@@ -192,7 +192,7 @@ def current_money(connection):
         sql,
     )
     money = cursor.fetchone()
-    print(f"Current money: {money[0]}€")
+    print(f"Current balance: {money[0]}€")
 
 
 def which_quiz(connection):
@@ -210,3 +210,11 @@ def random_quiz(connection):
     quizzes = which_quiz(connection)
     one_random_quiz = random.sample(quizzes, 1)
     return one_random_quiz
+
+
+def get_player_money(connection):
+    sql = "SELECT money FROM player where screen_name = screen_name"
+    cursor = connection.cursor()
+    cursor.execute(sql)
+    current_money = cursor.fetchone()
+    return current_money[0]
