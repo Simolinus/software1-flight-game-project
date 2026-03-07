@@ -1,7 +1,10 @@
 import mariadb
 import sys
 from db_functionality import *
+from datetime import datetime
 
+start_time = None
+end_time = None
 
 def initialize_game():
     connection = connect_to_database()
@@ -14,13 +17,34 @@ def initialize_game():
     if existing_players:
         print(f"\nHello {existing_players}\n")
 
-
 def user_input(key, connection):
+    global start_time, end_time
     if key == "0":
+        start_time = datetime.now()
+        connection = connect_to_database()
         start_new_game(connection)
         initialize_game()
     elif key == "4":
         print("Exiting")
+        current_score = get_player_score(connection)
+        if are_all_puzzles_found(connection) == True:
+            end_time = datetime.now()
+            time_difference = (end_time - start_time).total_seconds()
+            if(time_difference > 0 and time_difference <= 60): # 1 minutes
+                current_score += 100
+            elif(time_difference > 60 and time_difference <= 300): # 5 minutes
+                current_score += 80
+            elif(time_difference > 300 and time_difference <= 600): # 10 minutes
+                current_score += 60
+            elif(time_difference > 600 and time_difference <= 1200): # 20 minutes
+                current_score += 40
+            elif(time_difference > 1200 and time_difference <= 1800): # 30 minutes
+                current_score += 10
+            cursor = connection.cursor()
+            sql = f"UPDATE player SET score = {current_score}"
+            cursor.execute(sql)
+            cursor.close
+        print("Final score: " + str(current_score))
         sys.exit(0)
     elif key == "1":
         commercial_range = 3500
@@ -103,12 +127,12 @@ def user_input(key, connection):
             if answer_input == "3":
                 break
             if answer_input == correct_answer:
-                print("Correct answer! +100€")
+                print("Correct answer! Money: +100€, Score: +1")
                 print("\n")
                 sql = "UPDATE quizzes SET answered = ? WHERE answer = ? AND id = ?"
                 cursor = connection.cursor()
                 cursor.execute(sql, (1, correct_answer, quiz_id))
-                sql = "UPDATE player SET money = money + 100"
+                sql = "UPDATE player SET money = money + 100, score = score + 1"
                 cursor.execute(sql)
                 cursor.close()
             else:
