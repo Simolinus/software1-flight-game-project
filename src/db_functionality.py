@@ -154,7 +154,7 @@ def player_distance_to_airports():
 
 
 def check_for_puzzle_piece(connection):
-    sql = "SELECT puzzle_piece FROM airport, player WHERE airport.ident = player.location AND puzzle_piece IS NOT null"
+    sql = "SELECT airport.puzzle_piece, puzzle_pieces.acquired FROM airport, player, puzzle_pieces WHERE airport.ident = player.location AND airport.puzzle_piece IS NOT null"
     cursor = connection.cursor()
     cursor.execute(
         sql,
@@ -163,22 +163,25 @@ def check_for_puzzle_piece(connection):
     cursor.close()
     if not result:
         return None
-    return result[0]
+    return result
+
 
 def acquire_puzzle_piece(connection):
     cursor = connection.cursor()
     puzzle_piece_at_player = check_for_puzzle_piece(connection)
     if puzzle_piece_at_player:
         sql = "UPDATE puzzle_pieces SET acquired = ? WHERE id = ?"
-        cursor.execute(sql, (1, puzzle_piece_at_player))
-        sql = "UPDATE player SET score = score + 10"
-        cursor.execute(sql)
-    cursor.close
+        cursor.execute(sql, (1, puzzle_piece_at_player[0]))
+        sql2 = "UPDATE player SET score = score + 10"
+        cursor.execute(sql2)
+    cursor.close()
+
 
 def are_all_puzzles_found(connection):
     cursor = connection.cursor()
     cursor.execute("SELECT acquired FROM puzzle_pieces")
     rows = cursor.fetchall()
+    cursor.close()
     return all(row[0] == 1 for row in rows)
 
 
@@ -189,7 +192,20 @@ def player_location_airport_name(connection):
         sql,
     )
     location = cursor.fetchone()
+    cursor.close()
     print(f"Current location: {location[0]}, {location[1]}, {location[2]}")
+    return location[2]
+
+
+def player_location_airport_arrived(connection):
+    sql = "SELECT ident, country.name, airport.name FROM airport, player, country WHERE airport.ident = player.location AND airport.iso_country = country.iso_country"
+    cursor = connection.cursor()
+    cursor.execute(
+        sql,
+    )
+    location = cursor.fetchone()
+    cursor.close()
+    return location[2]
 
 
 def current_money(connection):
@@ -199,7 +215,9 @@ def current_money(connection):
         sql,
     )
     money = cursor.fetchone()
+    cursor.close()
     print(f"Current balance: {money[0]}€")
+
 
 def which_quiz(connection):
     sql = "SELECT id, quiz, answer FROM quizzes WHERE NOT answered = '1'"
@@ -223,6 +241,7 @@ def get_player_money(connection):
     cursor = connection.cursor()
     cursor.execute(sql)
     current_money = cursor.fetchone()
+    cursor.close()
     return current_money[0]
 
 
@@ -231,4 +250,17 @@ def get_player_score(connection):
     cursor = connection.cursor()
     cursor.execute(sql)
     current_score = cursor.fetchone()
+    cursor.close()
     return current_score[0]
+
+
+def puzzle_pieces_found(connection):
+    cursor = connection.cursor()
+    puzzle_pieces_total = 0
+    sql = "SELECT acquired FROM puzzle_pieces WHERE puzzle_pieces.acquired = '1'"
+    cursor.execute(sql)
+    puzzle_pieces_aquired = cursor.fetchall()
+    for i in puzzle_pieces_aquired:
+        puzzle_pieces_total += 1
+    cursor.close()
+    return puzzle_pieces_total
