@@ -6,7 +6,9 @@ from datetime import datetime
 start_time = None
 end_time = None
 
+
 def initialize_game():
+    global start_time, end_time
     connection = connect_to_database()
     existing_players = check_for_players(connection)
     if not existing_players:
@@ -16,35 +18,16 @@ def initialize_game():
         print(f"\nHello {player_name}\n")
     if existing_players:
         print(f"\nHello {existing_players}\n")
+    start_time = datetime.now()
+
 
 def user_input(key, connection):
-    global start_time, end_time
     if key == "0":
-        start_time = datetime.now()
         connection = connect_to_database()
         start_new_game(connection)
         initialize_game()
     elif key == "4":
         print("Exiting")
-        current_score = get_player_score(connection)
-        if are_all_puzzles_found(connection) == True:
-            end_time = datetime.now()
-            time_difference = (end_time - start_time).total_seconds()
-            if(time_difference > 0 and time_difference <= 60): # 1 minutes
-                current_score += 100
-            elif(time_difference > 60 and time_difference <= 300): # 5 minutes
-                current_score += 80
-            elif(time_difference > 300 and time_difference <= 600): # 10 minutes
-                current_score += 60
-            elif(time_difference > 600 and time_difference <= 1200): # 20 minutes
-                current_score += 40
-            elif(time_difference > 1200 and time_difference <= 1800): # 30 minutes
-                current_score += 10
-            cursor = connection.cursor()
-            sql = f"UPDATE player SET score = {current_score}"
-            cursor.execute(sql)
-            cursor.close
-        print("Final score: " + str(current_score))
         sys.exit(0)
     elif key == "1":
         commercial_range = 3500
@@ -79,7 +62,9 @@ def user_input(key, connection):
                         sql2 = f"UPDATE player SET money = {current_balance}-300"
                         cursor.execute(sql2)
                         cursor.close
-                        print(f"Arrived at {destination}")
+                        print(
+                            f"Arrived at {player_location_airport_arrived(connection)}"
+                        )
                         return
                     else:
                         print("NOT ENOUGH BALANCE (€)\n")
@@ -106,7 +91,9 @@ def user_input(key, connection):
                         sql3 = f"UPDATE player SET money = {current_balance}-500"
                         cursor.execute(sql3)
                         cursor.close
-                        print(f"Arrived at {destination}")
+                        print(
+                            f"Arrived at {player_location_airport_arrived(connection)}"
+                        )
                         return
                     else:
                         print("NOT ENOUGH BALANCE (€)\n")
@@ -143,15 +130,48 @@ def user_input(key, connection):
         return
 
 
+def should_game_end(connection):
+    current_score = get_player_score(connection)
+    if are_all_puzzles_found(connection) == True:
+        end_time = datetime.now()
+        time_difference = (end_time - start_time).total_seconds()
+        if time_difference > 0 and time_difference <= 60:  # 1 minutes
+            current_score += 100
+        elif time_difference > 60 and time_difference <= 300:  # 5 minutes
+            current_score += 80
+        elif time_difference > 300 and time_difference <= 600:  # 10 minutes
+            current_score += 60
+        elif time_difference > 600 and time_difference <= 1200:  # 20 minutes
+            current_score += 40
+        elif time_difference > 1200 and time_difference <= 1800:  # 30 minutes
+            current_score += 10
+        cursor = connection.cursor()
+        sql = f"UPDATE player SET score = {current_score}"
+        cursor.execute(sql)
+        cursor.close
+        print("Congratulations! You found all 10 puzzle pieces.")
+        print("Here is your final score: " + str(current_score))
+        print("Thank you for playing!")
+        sys.exit(0)
+
+
 def main():
     connection = connect_to_database()
     while True:
         player = check_for_players(connection)
-        print(player)
-        print("////////////////////")
+        puzzle_piece_at_player = check_for_puzzle_piece(connection)
+        if puzzle_piece_at_player and puzzle_piece_at_player[1] != 1:
+            print(
+                f"puzzle piece nr.{puzzle_piece_at_player[0]} found at {player_location_airport_arrived(connection)}"
+            )
+        acquire_puzzle_piece(connection)
+        should_game_end(connection)
+        print(f"\n{player}")
+        print("--------------")
         print(
             "\nAvailable options:\n0: Start new game\n1: Travel\n2: Answer quiz\n3: Inspect clue\n4: Exit\n"
         )
+        print(f"Puzzle pieces found {puzzle_pieces_found(connection)} out of 10")
         current_money(connection)
         player_location_airport_name(connection)
         user_input_key = input("Enter command: ")
