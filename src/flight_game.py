@@ -19,6 +19,7 @@ def initialize_game():
     if existing_players:
         print(f"\nHello {existing_players}\n")
     start_time = datetime.now()
+    return
 
 
 def user_input(key, connection):
@@ -26,6 +27,7 @@ def user_input(key, connection):
         connection = connect_to_database()
         start_new_game(connection)
         initialize_game()
+        return
     elif key == "4":
         print("Exiting")
         sys.exit(0)
@@ -102,7 +104,7 @@ def user_input(key, connection):
         return
     elif key == "2":
         while True:
-            print("3: Go back\n")
+            print("b: Go back\n")
             quiz = random_quiz(connection)
             if not quiz:
                 print("All quizzes answered!")
@@ -111,7 +113,7 @@ def user_input(key, connection):
             print(f"Quiz: {quiz[0][1]}")
             quiz_id = quiz[0][0]
             answer_input = input("Answer quiz: ")
-            if answer_input == "3":
+            if answer_input == "b":
                 break
             if answer_input == correct_answer:
                 print("Correct answer! Money: +100€, Score: +1")
@@ -149,10 +151,15 @@ def should_game_end(connection):
         sql = f"UPDATE player SET score = {current_score}"
         cursor.execute(sql)
         cursor.close
-        print("Congratulations! You found all 10 puzzle pieces.")
-        print("Here is your final score: " + str(current_score))
+        print("\nCongratulations! You found all 10 puzzle pieces.")
+        print("\nFinal score: " + str(current_score))
         print("Thank you for playing!")
-        sys.exit(0)
+        print("\nAvailable options:\n0: Start new game\n4: Exit\n")
+        user_input_key = input("Enter command: ")
+        if user_input_key == "0" or user_input_key == "4":
+            user_input(user_input_key, connection)
+        else:
+            print("Invalid command!")
 
 
 def main():
@@ -160,9 +167,9 @@ def main():
     while True:
         player = check_for_players(connection)
         puzzle_piece_at_player = check_for_puzzle_piece(connection)
-        if puzzle_piece_at_player and puzzle_piece_at_player[1] != 1:
+        if puzzle_piece_at_player and puzzle_piece_at_player[0] != 1:
             print(
-                f"puzzle piece nr.{puzzle_piece_at_player[0]} found at {player_location_airport_arrived(connection)}"
+                f"Puzzle piece No.{puzzle_piece_at_player[0]} found at {player_location_airport_arrived(connection)}\n"
             )
         acquire_puzzle_piece(connection)
         should_game_end(connection)
