@@ -264,3 +264,15 @@ def puzzle_pieces_found(connection):
         puzzle_pieces_total += 1
     cursor.close()
     return puzzle_pieces_total
+
+
+def get_puzzle_clues(connection):
+    cursor = connection.cursor()
+    sql = "SELECT airport.continent FROM airport JOIN puzzle_pieces ON airport.puzzle_piece = puzzle_pieces.id WHERE puzzle_pieces.acquired = 0 ORDER BY puzzle_pieces.id ASC LIMIT 1"
+    cursor.execute(sql)
+    result = cursor.fetchone()
+    cursor.close()
+    if result:
+        return result[0]
+    else:
+        return None

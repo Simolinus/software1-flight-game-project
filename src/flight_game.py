@@ -76,7 +76,7 @@ def user_input(key, connection):
                         cursor.execute(sql)
                         sql2 = f"UPDATE player SET money = {current_balance}-300"
                         cursor.execute(sql2)
-                        cursor.close
+                        cursor.close()
                         print(
                             f"Arrived at {player_location_airport_arrived(connection)}"
                         )
@@ -105,7 +105,7 @@ def user_input(key, connection):
                         cursor.execute(sql)
                         sql3 = f"UPDATE player SET money = {current_balance}-500"
                         cursor.execute(sql3)
-                        cursor.close
+                        cursor.close()
                         print(
                             f"Arrived at {player_location_airport_arrived(connection)}"
                         )
@@ -141,7 +141,11 @@ def user_input(key, connection):
                 print("Wrong answer!")
         return
     elif key == "3":
-        print("Clue is ?")
+        clues = get_puzzle_clues(connection)
+        if clues == None:
+            print("No more clues")
+        else:
+            print(f"The next puzzle piece is on this continent: {clues}")
         return
 
 
@@ -163,7 +167,7 @@ def should_game_end(connection):
         cursor = connection.cursor()
         sql = f"UPDATE player SET score = {current_score}"
         cursor.execute(sql)
-        cursor.close
+        cursor.close()
         print("\nCongratulations! You found all 10 puzzle pieces.")
         print("\nFinal score: " + str(current_score))
         print("Thank you for playing!")
@@ -180,10 +184,11 @@ def main():
     while True:
         player = check_for_players(connection)
         puzzle_piece_at_player = check_for_puzzle_piece(connection)
-        if puzzle_piece_at_player and puzzle_piece_at_player[0] != 1:
-            print(
-                f"Puzzle piece No.{puzzle_piece_at_player[0]} found at {player_location_airport_arrived(connection)}\n"
-            )
+        if puzzle_piece_at_player is not None:
+            if puzzle_piece_at_player[1] != 1:
+                print(
+                    f"Puzzle piece No.{puzzle_piece_at_player[0]} found at {player_location_airport_arrived(connection)}\n"
+                )
         acquire_puzzle_piece(connection)
         should_game_end(connection)
         print(f"\n{player}")
@@ -195,7 +200,7 @@ def main():
         current_money(connection)
         player_location_airport_name(connection)
         user_input_key = input("Enter command: ")
-        print("\n")
+        print("--------------")
         user_input(user_input_key, connection)
 
 
