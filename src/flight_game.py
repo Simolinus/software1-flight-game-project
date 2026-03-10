@@ -1,8 +1,11 @@
 import mariadb
 import sys
+import time
 from db_functionality import *
 from datetime import datetime
 
+file = open("game_story.txt", "r")
+game_story = file.read()
 start_time = None
 end_time = None
 
@@ -13,6 +16,8 @@ def initialize_game():
     existing_players = check_for_players(connection)
     if not existing_players:
         start_new_game(connection)
+        game_story_objectives(game_story)
+        print("\n")
         player_name = input("Enter player name: ")
         create_player(connection, player_name)
         print(f"\nHello {player_name}\n")
@@ -20,6 +25,14 @@ def initialize_game():
         print(f"\nHello {existing_players}\n")
     start_time = datetime.now()
     return
+
+
+def game_story_objectives(game_story, delay=0.03):
+    for char in game_story:
+        sys.stdout.write(char)
+        sys.stdout.flush()
+        time.sleep(delay)
+    print()
 
 
 def user_input(key, connection):
