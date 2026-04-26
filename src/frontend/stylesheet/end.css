@@ -1,0 +1,65 @@
+body {
+  background-image: url("End.png");
+  background-attachment: fixed;
+  background-repeat: no-repeat;
+  height: 100vh;
+  margin: 0;
+  background-size: 100% 100%;
+  background-position: center;
+  overflow: hidden;
+}
+ul {
+  list-style-type: none;
+}
+#con {
+  margin-top: 117px;
+  margin-left: 850px;
+  margin-bottom: 4px;
+  color: #ffd700;
+  font-size: 20px;
+  background-color: rgb(0, 0, 0, 0.25);
+  width: 325px;
+  border: none;
+  padding: 4px 7px;
+  border-radius: 6px;
+  cursor: pointer;
+  font-family: "Poppins", sans-serif;
+  font-weight: 700;
+}
+.sta {
+  margin-top: 0;
+  margin-left: 920px;
+  color: #ffd700;
+  font-size: 20px;
+  background-color: rgb(0, 0, 0, 0.5);
+  width: 200px;
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  padding: 4px 7px;
+  border-radius: 10px;
+  cursor: pointer;
+}
+.cho {
+  margin-left: 900px;
+  margin-top: 280px;
+  display: flex;
+  justify-content: center;
+  gap: 18px;
+  padding: 10px 16px;
+  width: 260px;
+  box-sizing: border-box;
+  margin-right: 17px;
+  border-radius: 40px;
+}
+#menu,
+#exit {
+  font-size: 23px;
+  padding: 6px 14px;
+  color: white;
+  background-color: green;
+  border: 1px solid black;
+  border-radius: 8px;
+  cursor: pointer;
+}
+#exit {
+  background-color: red;
+}
