@@ -215,3 +215,5 @@ __marimo__/
 # Streamlit
 .streamlit/secrets.toml
 readme.sql
+src/backend/flight_game.py
+.gitignore
