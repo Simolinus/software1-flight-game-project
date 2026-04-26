@@ -1,8 +1,41 @@
 import mariadb
 import random
-import geopy
+import sys
+import time
 from geopy import distance
 from geopy.distance import geodesic
+from datetime import datetime
+
+start_time = None
+end_time = None
+
+
+def game_story_objectives(game_story, delay=0.03):
+    for char in game_story:
+        sys.stdout.write(char)
+        sys.stdout.flush()
+        time.sleep(delay)
+
+
+def should_game_end(connection):
+    current_score = get_player_score(connection)
+    if are_all_puzzles_found(connection) == True:
+        end_time = datetime.now()
+        time_difference = (end_time - start_time).total_seconds()
+        if time_difference > 0 and time_difference <= 1200:  # 20 minutes
+            current_score += 100
+        elif time_difference > 1200 and time_difference <= 1800:  # 30 minutes
+            current_score += 80
+        elif time_difference > 1800 and time_difference <= 2400:  # 40 minutes
+            current_score += 60
+        elif time_difference > 2400 and time_difference <= 3000:  # 50 minutes
+            current_score += 40
+        elif time_difference > 3000 and time_difference <= 3400:  # 60 minutes
+            current_score += 10
+        cursor = connection.cursor()
+        sql = f"UPDATE player SET score = {current_score}"
+        cursor.execute(sql)
+        cursor.close()
 
 
 def connect_to_database():
@@ -16,9 +49,10 @@ def connect_to_database():
     )
     return connection
 
-
-def get_distance_between_airports(connection, icao, icao2):
-    sql = "SELECT latitude_deg, longitude_deg FROM airport WHERE ident = ? OR ident = ?"
+    # def get_distance_between_airports(connection, icao, icao2):
+    sql = (
+        "SELECT latitude_deg, longitude_deg FROM airport WHERE ident = %s OR ident = %s"
+    )
     cursor = connection.cursor()
     cursor.execute(sql, (icao, icao2))
     result = cursor.fetchall()
@@ -51,21 +85,21 @@ def get_player_location(connection):
     return result
 
 
-def get_airports(connection):
-    sql = "SELECT airport.ident, airport.name, country.name FROM airport, country"
-    cursor = connection.cursor()
-    cursor.execute(
-        sql,
-    )
-    result = cursor.fetchall()
-    cursor.close()
-    return result
+# def get_airports(connection):
+#     sql = "SELECT airport.ident, airport.name, country.name FROM airport, country"
+#     cursor = connection.cursor()
+#     cursor.execute(
+#         sql,
+#     )
+#     result = cursor.fetchall()
+#     cursor.close()
+#     return result
 
 
-def create_player(connection, player_name):
-    sql = "INSERT INTO player (money, screen_name, location, score) VALUES (?, ?, ?, ?)"
+def create_player(connection, screen_name):
+    sql = "INSERT INTO player (money, screen_name, location, score) VALUES (%s, %s, %s, %s)"
     cursor = connection.cursor()
-    cursor.execute(sql, (1000, player_name, "EFHK", 0))
+    cursor.execute(sql, (1000, screen_name, "EFHK", 0))
     cursor.close()
 
 
@@ -136,7 +170,7 @@ def randomize_puzzle_piece_location(connection):
     for i in range(10):
         puzzle_piece_id = puzzle_pieces[i][0]
         airport_id = random_airports[i][0]
-        sql = "UPDATE airport SET puzzle_piece = ? WHERE id = ?"
+        sql = "UPDATE airport SET puzzle_piece = %s WHERE ident = %s"
         cursor.execute(sql, (puzzle_piece_id, airport_id))
     cursor.close()
 
@@ -170,7 +204,7 @@ def acquire_puzzle_piece(connection):
     cursor = connection.cursor()
     puzzle_piece_at_player = check_for_puzzle_piece(connection)
     if puzzle_piece_at_player:
-        sql = "UPDATE puzzle_pieces SET acquired = ? WHERE id = ?"
+        sql = "UPDATE puzzle_pieces SET acquired = %s WHERE id = %s"
         cursor.execute(sql, (1, puzzle_piece_at_player[0]))
         sql2 = "UPDATE player SET score = score + 10"
         cursor.execute(sql2)
@@ -236,19 +270,19 @@ def random_quiz(connection):
     return one_random_quiz
 
 
-def get_player_money(connection):
-    sql = "SELECT money FROM player where screen_name = screen_name"
+def get_player_money(connection, screen_name):
+    sql = "SELECT money FROM player where screen_name = %s"
     cursor = connection.cursor()
-    cursor.execute(sql)
+    cursor.execute(sql, (screen_name,))
     current_money = cursor.fetchone()
     cursor.close()
     return current_money[0]
 
 
-def get_player_score(connection):
-    sql = "SELECT score FROM player where screen_name = screen_name"
+def get_player_score(connection, screen_name):
+    sql = "SELECT score FROM player where screen_name = %s"
     cursor = connection.cursor()
-    cursor.execute(sql)
+    cursor.execute(sql, (screen_name,))
     current_score = cursor.fetchone()
     cursor.close()
     return current_score[0]

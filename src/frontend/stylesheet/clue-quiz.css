@@ -1,0 +1,155 @@
+body,
+html {
+  margin: 0;
+  height: 100%;
+  overflow: auto;
+}
+#m-title {
+  border: 3px solid wheat;
+  background-color: rgba(255, 255, 255, 0.7);
+  display: inline-block;
+  padding: 10px 24px;
+  border-radius: 8px;
+  margin-top: 12px;
+  font-size: 28px;
+}
+.sky {
+  text-align: center;
+}
+.r-img {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  object-fit: cover;
+  z-index: -1;
+}
+.q {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+}
+.left-section {
+  display: flex;
+  flex-direction: column;
+}
+.right-section {
+  display: flex;
+  flex-direction: column;
+}
+#back {
+  margin-top: 50px;
+  background-color: #222222;
+  font-size: 28px;
+  color: white;
+  padding: 5px 12px;
+  border-radius: 8px;
+  cursor: pointer;
+  margin-left: 70px;
+}
+#clue {
+  margin-left: 72px;
+  font-size: 35px;
+  color: white;
+  -webkit-text-stroke: 1px black;
+  font-family: "Poppins", sans-serif;
+  font-weight: 700;
+  text-shadow: 0 1px 3px rgba(0, 0, 0, 0.8);
+  margin-bottom: 0;
+}
+#clues {
+  margin-top: 0;
+  margin-left: 70px;
+  width: 600px;
+  height: 120px;
+  box-sizing: border-box;
+  font-size: 26px;
+  background-color: white;
+  border: 3px solid wheat;
+  border-radius: 6px;
+  color: black;
+}
+#quiz {
+  margin-top: 40px;
+  margin-left: 70px;
+  font-size: 35px;
+  color: white;
+  -webkit-text-stroke: 1px black;
+  font-family: "Poppins", sans-serif;
+  font-weight: 700;
+  text-shadow: 0 1px 3px rgba(0, 0, 0, 0.8);
+  margin-bottom: 0;
+}
+#quizzes {
+  margin-top: 0;
+  margin-left: 70px;
+  width: 600px;
+  height: 125px;
+  box-sizing: border-box;
+  font-size: 22px;
+  background-color: white;
+  border: 3px solid wheat;
+  border-radius: 6px;
+  color: black;
+  margin-bottom: 0;
+}
+.ans {
+  display: flex;
+  align-items: center;
+  margin-left: 355px;
+  margin-top: 1.5px;
+  gap: 3px;
+}
+#answer {
+  padding: 14px;
+  width: 200px;
+  font-size: 20px;
+  box-sizing: border-box;
+  background-color: white;
+  border: 3px solid wheat;
+  border-radius: 6px;
+}
+#submit {
+  background-color: #222222;
+  font-size: 25px;
+  width: 110px;
+  color: white;
+  border: none;
+  padding: 10px;
+  border-radius: 8px;
+  cursor: pointer;
+  height: 54px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+ul {
+  list-style-type: none;
+}
+#status {
+  font-size: 30px;
+  color: white;
+  -webkit-text-stroke: 1.5px black;
+  font-family: "Poppins", sans-serif;
+  font-weight: 700;
+  text-shadow: 0 1px 3px rgba(0, 0, 0, 0.8);
+  margin-bottom: 0;
+}
+.sta {
+  margin-top: 0;
+  margin-right: 70px;
+  width: 260px;
+  box-sizing: border-box;
+  margin-left: auto;
+  font-size: 24px;
+  background-color: rgba(0, 0, 0, 0.7);
+  border: 2px solid #333;
+  padding: 14px;
+  border-radius: 6px;
+  color: white;
+  text-align: left;
+}
+#n {
+  color: #2ecc71;
+}

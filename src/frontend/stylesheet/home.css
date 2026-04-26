@@ -1,0 +1,82 @@
+.h-img {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  object-fit: cover;
+  z-index: -1;
+}
+body {
+  margin: 0;
+  padding: 0;
+}
+.h {
+  text-align: center;
+  margin-top: 35px;
+}
+ul {
+  list-style-type: none;
+  padding: 0;
+  margin: 0;
+}
+#h-sq {
+  font-size: 70px;
+  margin: 0;
+}
+#h-pj {
+  font-size: 34px;
+  margin: 0;
+}
+.h-title {
+  margin-top: -12px;
+  border: 1px solid white;
+  background-color: rgba(255, 255, 255, 0.7);
+  display: inline-block;
+  padding: 20px 30px;
+  border-radius: 15px;
+  text-align: center;
+}
+#n-game {
+  background-color: #222222;
+  font-size: 35px;
+  color: whitesmoke;
+  margin-top: 120px;
+  border: white;
+  padding: 10px 20px;
+  border-radius: 8px;
+  cursor: pointer;
+}
+.entername {
+  gap: 1mm;
+  display: flex;
+  justify-content: center;
+  margin-top: 150px;
+  color: black;
+}
+#explorer {
+  color: black;
+  -webkit-text-stroke: 0.2px white;
+  font-size: 35px;
+  margin: 0;
+  display: block;
+  font-family: "Poppins", sans-serif;
+  font-weight: 700;
+}
+#name {
+  padding: 0;
+  font-size: 12px;
+  width: 150px;
+  height: 35px;
+  border: 1.5px solid wheat;
+  border-radius: 5px;
+}
+#start {
+  background-color: #222222;
+  font-size: 24px;
+  color: white;
+  border: white;
+  padding: 3px 5px;
+  border-radius: 8px;
+  cursor: pointer;
+}
