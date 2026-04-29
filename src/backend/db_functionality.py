@@ -64,7 +64,7 @@ def connect_to_database():
 
 
 def airport_locations(connection):
-    sql = "SELECT iso_country, name, ident, latitude_deg, longitude_deg FROM airport, player WHERE NOT player.location = airport.ident"
+    sql = "SELECT country.name, airport.name, ident, latitude_deg, longitude_deg FROM airport JOIN country ON airport.iso_country = country.iso_country"
     cursor = connection.cursor()
     cursor.execute(
         sql,
