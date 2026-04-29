@@ -29,6 +29,13 @@ def currentAirport():
     return json.dumps(result)
 
 
+@app.route("/airportLocations", methods=["GET"])
+def airports_locations():
+    connection = db.get_connection()
+    result = airport_locations(connection)
+    return json.dumps(result)
+
+
 @app.route("/playerlocation", methods=["GET"])
 def player_location():
     connection = db.get_connection()
