@@ -24,12 +24,12 @@ html {
 .m-b ul {
   pointer-events: auto;
 }
-.map {
+#map {
   position: fixed;
   top: 40px;
   left: 0;
   width: 100vw;
-  height: calc(100vh - 32px);
+  height: calc(100vh - 40px);
   border: none;
   z-index: 0;
 }

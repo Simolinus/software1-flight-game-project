@@ -12,7 +12,7 @@ app = Flask(__name__)
 CORS(app)
 
 
-@app.route("/airports")
+@app.route("/airports", methods=["GET"])
 def airports():
     cursor = db.get_connection().cursor(dictionary=True)
     sql = "SELECT iso_country, name, ident, latitude_deg, longitude_deg FROM airport"
@@ -22,7 +22,14 @@ def airports():
     return json.dumps(result)
 
 
-@app.route("/playerlocation")
+@app.route("/currentAirport", methods=["GET"])
+def currentAirport():
+    connection = db.get_connection()
+    result = player_location_airport_name(connection)
+    return json.dumps(result)
+
+
+@app.route("/playerlocation", methods=["GET"])
 def player_location():
     connection = db.get_connection()
     cursor = db.get_connection().cursor(dictionary=True)
@@ -34,7 +41,7 @@ def player_location():
     return json.dumps(result)
 
 
-@app.route("/player")
+@app.route("/player", methods=["GET"])
 def player():
     connection = db.get_connection()
     cursor = db.get_connection().cursor(dictionary=True)
@@ -48,7 +55,7 @@ def player():
     return json.dumps(result)
 
 
-@app.route("/map-data")
+@app.route("/map-data", methods=["GET"])
 def map_data():
     connection = db.get_connection()
     cursor = db.get_connection().cursor(dictionary=True)

@@ -227,8 +227,8 @@ def player_location_airport_name(connection):
     )
     location = cursor.fetchone()
     cursor.close()
-    print(f"Current location: {location[0]}, {location[1]}, {location[2]}")
-    return location[2]
+    # print(f"Current location: {location[0]}, {location[1]}, {location[2]}")
+    return location
 
 
 def player_location_airport_arrived(connection):
