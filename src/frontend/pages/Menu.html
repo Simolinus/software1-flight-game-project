@@ -4,6 +4,12 @@
     <meta charset="UTF-8" />
     <title>Skyquest The Puzzle Journey</title>
     <link rel="stylesheet" href="/src/frontend/stylesheet/menu.css" />
+    <link
+      rel="stylesheet"
+      href="https://unpkg.com/leaflet@1.9.3/dist/leaflet.css"
+    />
+    <script src="https://unpkg.com/leaflet@1.9.3/dist/leaflet.js"></script>
+    <script src="/src/frontend/javascript/map.js" defer></script>
   </head>
   <body>
     <div class="m">
@@ -11,10 +17,7 @@
         <h2 id="m-title">Skyquest: The Puzzle Journey</h2>
       </header>
       <main>
-        <iframe
-          src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d1981.332616223297!2d24.646549216174775!3d60.22413558195863!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x468df3a13774843f%3A0x6758414408660e5a!2sKaraportti%202%2C%2002340%20Espoo%2C%20Finland!5e0!3m2!1sen!2sbd!4v1711718500000!5m2!1sen!2sbd"
-          class="map"
-        ></iframe>
+        <div id="map"></div>
         <div class="m-b">
           <nav>
             <ul>

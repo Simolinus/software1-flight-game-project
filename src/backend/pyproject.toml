@@ -9,4 +9,5 @@ dependencies = [
     "datetime",
     "time",
     "os",
+    "leaflet",
 ]
