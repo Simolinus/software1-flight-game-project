@@ -82,11 +82,10 @@ def map_data():
 def travel():
     cursor = db.get_connection().cursor(dictionary=True)
     data = request.json
-    screen_name = data["screen_name"]
     destination = data["destination"]
     travel_type = data["type"]
-    sql = "SELECT airport.latitude_deg, airport.longitude_deg, airport.ident, player.money FROM player JOIN airport ON airport.ident = player.location WHERE player.screen_name = %s"
-    cursor.execute(sql, (screen_name,))
+    sql = "SELECT airport.latitude_deg, airport.longitude_deg, airport.ident, player.money FROM player JOIN airport ON airport.ident = player.location"
+    cursor.execute(sql)
     player = cursor.fetchone()
     sql2 = "SELECT latitude_deg, longitude_deg FROM airport WHERE ident = %s"
     cursor.execute(sql2, (destination,))
@@ -113,18 +112,29 @@ def travel():
     if player["money"] < COST:
         cursor.close()
         return json.dumps({"error": "Not enough money"}), 400
-    sql3 = "UPDATE player SET location = %s, money = money - %s WHERE screen_name = %s"
-    cursor.execute(sql3, (destination, COST, screen_name))
+    sql3 = "UPDATE player SET location = %s, money = money - %s LIMIT 1"
+    cursor.execute(sql3, (destination, COST))
     cursor.close()
     return json.dumps(
         {"status": "success", "new_location": destination, "distance": dist}
     )
 
+@app.route("/acquire-puzzle-piece", methods=["GET"])
+def aquire():
+    connection = db.get_connection()
+    puzzle_piece = acquire_puzzle_piece(connection)
+    acquired = check_if_puzzle_piece_acquired(connection, puzzle_piece)
+    if acquired == 0:
+        return json.dumps({"piece": f"puzzle_piece NO.{puzzle_piece} found"})
+    elif acquired == 1:
+        return json.dumps({"piece": f"puzzle_piece NO.{puzzle_piece} already acquired"})
+    else:
+        return json.dumps({"error": "Something went wrong"}), 400
 
 @app.route("/start-new-game", methods=["POST"])
 def button_start_new_game():
     connection = db.get_connection()
-    data = request.json
+    data = request.json()
     screen_name = data["screen_name"]
     start_new_game(connection)
     create_player(connection, screen_name)

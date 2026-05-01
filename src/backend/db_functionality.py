@@ -64,7 +64,7 @@ def connect_to_database():
 
 
 def airport_locations(connection):
-    sql = "SELECT country.name, airport.name, ident, latitude_deg, longitude_deg FROM airport JOIN country ON airport.iso_country = country.iso_country"
+    sql = "SELECT country.name, airport.name, ident, latitude_deg, longitude_deg, puzzle_piece FROM airport JOIN country ON airport.iso_country = country.iso_country"
     cursor = connection.cursor()
     cursor.execute(
         sql,
@@ -199,6 +199,17 @@ def check_for_puzzle_piece(connection):
         return None
     return result
 
+def check_if_puzzle_piece_acquired(connection, piece):
+    sql = "SELECT airport.puzzle_piece, puzzle_pieces.acquired FROM airport, puzzle_pieces WHERE airport.puzzle_piece = %s"
+    cursor = connection.cursor()
+    cursor.execute(sql, (piece,))
+    result = cursor.fetchone()
+    cursor.close()
+    if result == 0:
+        return 0
+    else:
+        return 1
+
 
 def acquire_puzzle_piece(connection):
     cursor = connection.cursor()
@@ -209,6 +220,7 @@ def acquire_puzzle_piece(connection):
         sql2 = "UPDATE player SET score = score + 10"
         cursor.execute(sql2)
     cursor.close()
+    return puzzle_piece_at_player[0]
 
 
 def are_all_puzzles_found(connection):
