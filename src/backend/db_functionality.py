@@ -99,7 +99,7 @@ def get_player_location(connection):
 def create_player(connection, screen_name):
     sql = "INSERT INTO player (money, screen_name, location, score) VALUES (%s, %s, %s, %s)"
     cursor = connection.cursor()
-    cursor.execute(sql, (1000, screen_name, "EFHK", 0))
+    cursor.execute(sql, (10000, screen_name, "EFHK", 0))
     cursor.close()
 
 
@@ -170,7 +170,7 @@ def randomize_puzzle_piece_location(connection):
     for i in range(10):
         puzzle_piece_id = puzzle_pieces[i][0]
         airport_id = random_airports[i][0]
-        sql = "UPDATE airport SET puzzle_piece = %s WHERE ident = %s"
+        sql = "UPDATE airport SET puzzle_piece = %s WHERE BINARY id = %s"
         cursor.execute(sql, (puzzle_piece_id, airport_id))
     cursor.close()
 
