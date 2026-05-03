@@ -99,7 +99,7 @@ def get_player_location(connection):
 def create_player(connection, screen_name):
     sql = "INSERT INTO player (money, screen_name, location, score) VALUES (%s, %s, %s, %s)"
     cursor = connection.cursor()
-    cursor.execute(sql, (10000, screen_name, "EFHK", 0))
+    cursor.execute(sql, (1000, screen_name, "EFHK", 0))
     cursor.close()
 
 
