@@ -63,6 +63,39 @@ def player():
     return json.dumps(result)
 
 
+@app.route("/player-update", methods=["POST"])
+def update_player():
+    try:
+        data = request.json
+        screen_name = data["screen_name"]
+        money = data["money"]
+        score = data["score"]
+
+        connection = db.get_connection()
+        cursor = connection.cursor()
+
+        sql = """
+            UPDATE player
+            SET money = %s, score = %s
+            WHERE screen_name = %s
+        """
+        cursor.execute(sql, (money, score, screen_name))
+        connection.commit()
+
+        return jsonify({"status": "success"})
+
+    except Exception as e:
+        print("update error:", e)
+        return jsonify({"error": "server error"}), 500
+
+    finally:
+        try:
+            cursor.close()
+            connection.close()
+        except:
+            pass
+
+
 @app.route("/map-data", methods=["GET"])
 def map_data():
     connection = db.get_connection()

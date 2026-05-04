@@ -19,6 +19,22 @@ export async function getPlayer() {
     return await res.json();
 }
 
+export async function updatePlayer(money, score) {
+    const res = await fetch(`${BASE_URL}/player-update`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+            screen_name: window.screen_name,
+            money: window.money,
+            score: window.score
+        })
+    });
+
+    const data = await res.json();
+    console.log("update result:", data);
+}
+
+
 export async function getPlayerLocation() {
     const res = await fetch(`${BASE_URL}/playerlocation`);
     return await res.json();
@@ -53,19 +69,27 @@ export async function countAcquiredPuzzles() {
     return data.count;
 }
 
-
+window.refreshPlayerUI = refreshPlayerUI;
+document.addEventListener("DOMContentLoaded", refreshPlayerUI);
+window.addEventListener("playerUpdated", refreshPlayerUI);
 export async function refreshPlayerUI() {
+    console.log("window:  ", window.screen_name, window.money, window.score);
   const p = await getPlayer();
   const count = await countAcquiredPuzzles();
+
+  console.log("pppppp: ", p.screen_name, p.money, p.score);
 
   document.querySelector("#name").textContent = p.screen_name;
   document.querySelector("#coin").textContent = p.money;
   document.querySelector("#puzzle").textContent = count;
   document.querySelector("#location").textContent = p.location;
+  window.screen_name = p.screen_name;
+  window.money = p.money;
+  window.score = p.score;
 }
-window.refreshPlayerUI = refreshPlayerUI;
-document.addEventListener("DOMContentLoaded", refreshPlayerUI);
 
+window.getQuiz = getQuiz;
+document.addEventListener("DOMContentLoaded", getQuiz);
 export async function getQuiz() {
     const res = await fetch(`${BASE_URL}/quiz`);
     const data = await res.json();
@@ -73,14 +97,8 @@ export async function getQuiz() {
     window.answer = data[0][2];
     console.log("js-getquiz:", quiz);
     console.log("js-answer:", window.answer);
-
-    //document.querySelector("#qui").textContent = data[0][1];
     document.querySelector(".qui").textContent = data[0][1];
-
-    //return data;
 }
-window.getQuiz = getQuiz;
-document.addEventListener("DOMContentLoaded", getQuiz);
 
 window.answer = "";
 document.addEventListener("DOMContentLoaded", () => {
@@ -91,9 +109,14 @@ document.addEventListener("DOMContentLoaded", () => {
         const answer = answerInput.value.trim();
         if(answer == window.answer) {
             alert("Congratulation!  Money: +100!  Score: +1");
+            window.money += 100;
+            window.score +=1;
+            updatePlayer(window.money, window.score);
+
+            const event = new Event("playerUpdated");
+            window.dispatchEvent(event);
         } else {
             alert("Wrong answer! Try again!");
         }
     });
 });
-
