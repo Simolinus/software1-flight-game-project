@@ -94,7 +94,9 @@ async function commercialTravel(airport) {
     currentView();
     alert(`Traveled to ${airport[1]}, ${airport[0]}`);
     check_puzzle_piece(airport);
-    refreshPlayerUI();
+    //refreshPlayerUI();
+                const event = new Event("playerUpdated");
+            window.dispatchEvent(event);
   }
   if (data.error) {
     alert(`${data.error}`);

@@ -69,6 +69,9 @@ export async function countAcquiredPuzzles() {
     return data.count;
 }
 
+window.screen_name = null;
+window.money = null;
+window.score = null;
 window.refreshPlayerUI = refreshPlayerUI;
 document.addEventListener("DOMContentLoaded", refreshPlayerUI);
 window.addEventListener("playerUpdated", refreshPlayerUI);
@@ -77,15 +80,22 @@ export async function refreshPlayerUI() {
   const p = await getPlayer();
   const count = await countAcquiredPuzzles();
 
-  console.log("pppppp: ", p.screen_name, p.money, p.score);
+  console.log("refreshPlayerUI: ", p.screen_name, p.money, p.score);
+  if(window.screen_name != null) {
+      document.querySelector("#name").textContent = window.screen_name;
+  } else {
+      document.querySelector("#name").textContent = p.screen_name;
+      window.screen_name = p.screen_name;
+  }
+  if(window.money != null) {
+      document.querySelector("#coin").textContent = window.money;
+  } else {
+      document.querySelector("#coin").textContent = p.money;
+      window.money = p.money;
 
-  document.querySelector("#name").textContent = p.screen_name;
-  document.querySelector("#coin").textContent = p.money;
+  }
   document.querySelector("#puzzle").textContent = count;
   document.querySelector("#location").textContent = p.location;
-  window.screen_name = p.screen_name;
-  window.money = p.money;
-  window.score = p.score;
 }
 
 window.getQuiz = getQuiz;
@@ -112,7 +122,6 @@ document.addEventListener("DOMContentLoaded", () => {
             window.money += 100;
             window.score +=1;
             updatePlayer(window.money, window.score);
-
             const event = new Event("playerUpdated");
             window.dispatchEvent(event);
         } else {
