@@ -4,6 +4,7 @@
     <meta charset="UTF-8" />
     <title>Skyquest The Puzzle Journey</title>
     <link rel="stylesheet" href="/src/frontend/stylesheet/home.css" />
+    <script type="module" src="/src/frontend/javascript/api.js"></script>
   </head>
   <body>
     <div class="h">
@@ -30,16 +31,30 @@
           <nav>
             <ul>
               <li>
-                <a href="Menu.html"
-                  ><button type="button" id="start" title="Click to start">
-                    Start ✈
-                  </button></a
-                >
+                <button type="button" id="start" title="Click to start">
+                  Start ✈
+                </button>
               </li>
             </ul>
           </nav>
         </div>
       </main>
     </div>
+    <script type="module">
+      import { startNewGame } from "../javascript/api.js";
+
+      const startBtn = document.getElementById("start");
+      startBtn.onclick = async () => {
+        const name = document.getElementById("name").value;
+        if (!name) {
+          alert("Please enter your name before starting the journey!");
+          return;
+        }
+        const result = await startNewGame(name);
+        console.log(result);
+        console.log("start new game");
+        window.location.href = "Menu.html";
+      };
+      </script>
   </body>
 </html>

@@ -1,3 +1,5 @@
+import { refreshPlayerUI } from "./api.js";
+
 let map = L.map("map", {
   maxZoom: 15,
   minZoom: 4,
@@ -92,6 +94,9 @@ async function commercialTravel(airport) {
     currentView();
     alert(`Traveled to ${airport[1]}, ${airport[0]}`);
     check_puzzle_piece(airport);
+    //refreshPlayerUI();
+                const event = new Event("playerUpdated");
+            window.dispatchEvent(event);
   }
   if (data.error) {
     alert(`${data.error}`);
@@ -114,6 +119,7 @@ async function privateTravel(airport) {
     currentView();
     alert(`Traveled to ${airport[1]}, ${airport[0]}`);
     check_puzzle_piece(airport);
+    refreshPlayerUI();
   }
   if (data.error) {
     alert(`${data.error}`);
@@ -131,5 +137,8 @@ async function check_puzzle_piece(airport) {
     }
   }
 }
+
+
 currentLocation();
 airport_markers();
+

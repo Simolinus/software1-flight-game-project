@@ -1,5 +1,5 @@
 import json
-from flask import Flask, request
+from flask import Flask, request, jsonify
 from flask_cors import CORS
 from geopy.distance import geodesic
 from database import Database
@@ -59,7 +59,41 @@ def player():
     cursor.execute(sql, (screen_name,))
     result = cursor.fetchone()
     cursor.close()
+    print("player debug: ", result)
     return json.dumps(result)
+
+
+@app.route("/player-update", methods=["POST"])
+def update_player():
+    try:
+        data = request.json
+        screen_name = data["screen_name"]
+        money = data["money"]
+        score = data["score"]
+
+        connection = db.get_connection()
+        cursor = connection.cursor()
+
+        sql = """
+            UPDATE player
+            SET money = %s, score = %s
+            WHERE screen_name = %s
+        """
+        cursor.execute(sql, (money, score, screen_name))
+        connection.commit()
+
+        return jsonify({"status": "success"})
+
+    except Exception as e:
+        print("update error:", e)
+        return jsonify({"error": "server error"}), 500
+
+    finally:
+        try:
+            cursor.close()
+            connection.close()
+        except:
+            pass
 
 
 @app.route("/map-data", methods=["GET"])
@@ -131,14 +165,28 @@ def aquire():
     else:
         return json.dumps({"error": "Something went wrong"}), 400
 
+@app.route("/count-acquired-puzzles", methods=["GET"])
+def count_acquired_puzzles():
+    connection = db.get_connection()
+    cursor = connection.cursor()
+    cursor.execute("SELECT COUNT(*) FROM puzzle_pieces WHERE acquired = 1")
+    result = cursor.fetchone()[0]
+    cursor.close()
+    print("count-acquired-puzzles:", result)
+    return jsonify({"count": result})
+
 @app.route("/start-new-game", methods=["POST"])
 def button_start_new_game():
     connection = db.get_connection()
-    data = request.json()
-    screen_name = data["screen_name"]
+    data = request.get_json()
+    screen_name = data.get("screen_name")
+    print("Received:", screen_name)
     start_new_game(connection)
     create_player(connection, screen_name)
-    return json.dumps({"status": "Started new game"})
+    return jsonify({
+        "message": "new game started",
+        "screen_name": screen_name
+    })
 
 
 @app.route("/quiz", methods=["GET"])

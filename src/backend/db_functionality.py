@@ -170,7 +170,7 @@ def randomize_puzzle_piece_location(connection):
     for i in range(10):
         puzzle_piece_id = puzzle_pieces[i][0]
         airport_id = random_airports[i][0]
-        sql = "UPDATE airport SET puzzle_piece = %s WHERE ident = %s"
+        sql = "UPDATE airport SET puzzle_piece = %s WHERE BINARY id = %s"
         cursor.execute(sql, (puzzle_piece_id, airport_id))
     cursor.close()
 

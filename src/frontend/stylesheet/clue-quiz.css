@@ -48,7 +48,7 @@ html {
   cursor: pointer;
   margin-left: 70px;
 }
-#clue {
+#clue_title {
   margin-left: 72px;
   font-size: 35px;
   color: white;
@@ -58,7 +58,7 @@ html {
   text-shadow: 0 1px 3px rgba(0, 0, 0, 0.8);
   margin-bottom: 0;
 }
-#clues {
+#clue_id {
   margin-top: 0;
   margin-left: 70px;
   width: 600px;
