@@ -1,4 +1,4 @@
-const BASE_URL = "http://127.0.0.1:3000";
+export const BASE_URL = "http://127.0.0.1:3000";
 
 export async function startNewGame(screen_name) {
     const res = await fetch(`${BASE_URL}/start-new-game`, {
@@ -38,15 +38,14 @@ export async function travel(destination, type) {
     return await res.json();
 }
 
-export async function getQuiz() {
-    const res = await fetch(`${BASE_URL}/quiz`);
-    return await res.json();
-}
-
 export async function getClue() {
     const res = await fetch(`${BASE_URL}/clue`);
-    return await res.json();
+    const data = await res.json();
+    console.log("data.clue: ", data);
+    document.querySelector(".clue_class").textContent = data;
 }
+window.addEventListener("load", getClue);
+document.addEventListener("DOMContentLoaded", getClue);
 
 export async function countAcquiredPuzzles() {
     const res = await fetch(`${BASE_URL}/count-acquired-puzzles`);
@@ -64,6 +63,37 @@ export async function refreshPlayerUI() {
   document.querySelector("#puzzle").textContent = count;
   document.querySelector("#location").textContent = p.location;
 }
-
 window.refreshPlayerUI = refreshPlayerUI;
 document.addEventListener("DOMContentLoaded", refreshPlayerUI);
+
+export async function getQuiz() {
+    const res = await fetch(`${BASE_URL}/quiz`);
+    const data = await res.json();
+    const quiz = data[0][1];
+    window.answer = data[0][2];
+    console.log("js-getquiz:", quiz);
+    console.log("js-answer:", window.answer);
+
+    //document.querySelector("#qui").textContent = data[0][1];
+    document.querySelector(".qui").textContent = data[0][1];
+
+    //return data;
+}
+window.getQuiz = getQuiz;
+document.addEventListener("DOMContentLoaded", getQuiz);
+
+window.answer = "";
+document.addEventListener("DOMContentLoaded", () => {
+    const submitBtn = document.querySelector("#submit");
+    const answerInput = document.querySelector("#answer");
+
+    submitBtn.addEventListener("click", () => {
+        const answer = answerInput.value.trim();
+        if(answer == window.answer) {
+            alert("Congratulation!  Money: +100!  Score: +1");
+        } else {
+            alert("Wrong answer! Try again!");
+        }
+    });
+});
+
