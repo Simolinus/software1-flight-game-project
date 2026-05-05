@@ -114,7 +114,7 @@ document.addEventListener("DOMContentLoaded", () => {
   const answerInput = document.querySelector("#answer");
 
   submitBtn.addEventListener("click", () => {
-    const answer = answerInput.value.trim();
+    const answer = answerInput.value.trim().toUpperCase();
     if (answer == window.answer) {
       alert("Congratulation!  Money: +100!  Score: +1");
       window.money += 100;
