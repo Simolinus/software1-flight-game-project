@@ -94,9 +94,9 @@ async function commercialTravel(airport) {
     currentView();
     alert(`Traveled to ${airport[1]}, ${airport[0]}`);
     check_puzzle_piece(airport);
-    //refreshPlayerUI();
-                const event = new Event("playerUpdated");
-            window.dispatchEvent(event);
+    refreshPlayerUI();
+    const event = new Event("playerUpdated");
+    window.dispatchEvent(event);
   }
   if (data.error) {
     alert(`${data.error}`);
@@ -129,7 +129,7 @@ async function privateTravel(airport) {
 async function check_puzzle_piece(airport) {
   if (airport[5] != null) {
     const response = await fetch("http://127.0.0.1:3000/acquire-puzzle-piece");
-    data = await response.json();
+    const data = await response.json();
     if (data.piece) {
       alert(data.piece);
     } else {
@@ -138,7 +138,5 @@ async function check_puzzle_piece(airport) {
   }
 }
 
-
 currentLocation();
 airport_markers();
-
