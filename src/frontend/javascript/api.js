@@ -110,6 +110,54 @@ export async function getQuiz() {
 
 window.answer = "";
 document.addEventListener("DOMContentLoaded", () => {
+    const submitBtn = document.querySelector("#submit");
+    const answerInput = document.querySelector("#answer");
+
+    submitBtn.addEventListener("click", () => {
+        const answer = answerInput.value.trim();
+        if(answer == window.answer) {
+            alert("Congratulation!  Money: +100!  Score: +1");
+            window.money += 100;
+            window.score +=1;
+            updatePlayer(window.money, window.score);
+            const event = new Event("playerUpdated");
+            window.dispatchEvent(event);
+        } else {
+            alert("Wrong answer! Try again!");
+        }
+    });
+});
+
+
+document.getElementById("n-game").addEventListener("click", newGame);
+
+async function newGame() {
+  const response = await fetch("../../backend/game_story_1.txt");
+  const text = await response.text();
+  console.log(text);
+
+  //typeWriter(text, "story-area", 30);
+}
+
+function typeWriter(text, elementId, speed = 40) {
+  const element = document.getElementById(elementId);
+  element.textContent = "";
+
+  let index = 0;
+
+  function type() {
+      console.log("text.length: ", text.length);
+    if (index < text.length) {
+        console.log("text: ", text.charAt(index));
+
+      element.textContent += text.charAt(index);
+      index++;
+      setTimeout(type, speed);
+    }
+  }
+
+  type();
+}
   const submitBtn = document.querySelector("#submit");
   const answerInput = document.querySelector("#answer");
 
