@@ -31,7 +31,9 @@ export async function updatePlayer(money, score) {
   });
 
   const data = await res.json();
-  console.log("update result:", data);
+  if(data.status == "success") {
+    refreshPlayerUI();
+  }
 }
 
 export async function getPlayerLocation() {
@@ -80,20 +82,19 @@ export async function refreshPlayerUI() {
   const count = await countAcquiredPuzzles();
 
   console.log("refreshPlayerUI: ", p.screen_name, p.money, p.score);
-  if (window.screen_name != null) {
-    document.querySelector("#name").textContent = window.screen_name;
-  } else {
-    document.querySelector("#name").textContent = p.screen_name;
-    window.screen_name = p.screen_name;
-  }
-  if (window.money != null) {
-    document.querySelector("#coin").textContent = window.money;
-  } else {
-    document.querySelector("#coin").textContent = p.money;
-    window.money = p.money;
-  }
+
+  document.querySelector("#name").textContent = p.screen_name;
+  window.screen_name = p.screen_name;
+  document.querySelector("#coin").textContent = p.money;
+  window.money = p.money;
+
   document.querySelector("#puzzle").textContent = count;
   document.querySelector("#location").textContent = p.location;
+
+  if (count >= 1) {
+    window.location.href = "../pages/End.html";
+}
+
 }
 
 window.getQuiz = getQuiz;
@@ -120,8 +121,6 @@ document.addEventListener("DOMContentLoaded", () => {
       window.money += 100;
       window.score += 1;
       updatePlayer(window.money, window.score);
-      const event = new Event("playerUpdated");
-      window.dispatchEvent(event);
     } else {
       alert("Wrong answer! Try again!");
     }
