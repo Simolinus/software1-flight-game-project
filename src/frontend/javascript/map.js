@@ -1,5 +1,4 @@
 import { refreshPlayerUI } from "./api.js";
-
 let map = L.map("map", {
   maxZoom: 15,
   minZoom: 4,
@@ -28,7 +27,9 @@ let playerIcon = L.icon({
 async function currentView() {
   let response = await fetch("http://127.0.0.1:3000/playerlocation");
   let airport = await response.json();
-  map.setView([airport.latitude_deg, airport.longitude_deg], 15);
+  map.flyTo([airport.latitude_deg, airport.longitude_deg], 15, {
+    duration: 3,
+  });
 }
 
 currentView();
@@ -92,14 +93,15 @@ async function commercialTravel(airport) {
   if (data.status === "success") {
     currentLocation();
     currentView();
-    alert(`Traveled to ${airport[1]}, ${airport[0]}`);
+    addToHistory(`Traveled to ${airport[1]}, ${airport[0]}`, "travel");
     check_puzzle_piece(airport);
+    updatePlayer(window.money, window.score);
     refreshPlayerUI();
     const event = new Event("playerUpdated");
     window.dispatchEvent(event);
   }
   if (data.error) {
-    alert(`${data.error}`);
+    addToHistory(data.error, "error");
   }
 }
 async function privateTravel(airport) {
@@ -117,12 +119,13 @@ async function privateTravel(airport) {
   if (data.status === "success") {
     currentLocation();
     currentView();
-    alert(`Traveled to ${airport[1]}, ${airport[0]}`);
+    addToHistory(`Traveled to ${airport[1]}, ${airport[0]}`, "travel");
     check_puzzle_piece(airport);
+    updatePlayer(window.money, window.score);
     refreshPlayerUI();
   }
   if (data.error) {
-    alert(`${data.error}`);
+    addToHistory(data.error, "error");
   }
 }
 
@@ -131,12 +134,26 @@ async function check_puzzle_piece(airport) {
     const response = await fetch("http://127.0.0.1:3000/acquire-puzzle-piece");
     const data = await response.json();
     if (data.piece) {
-      alert(data.piece);
+      addToHistory(data.piece, "puzzle");
     } else {
-      alert(data.error);
+      addToHistory(data.error, "error");
     }
   }
 }
-
+function addToHistory(message, type = "info") {
+  const box = document.getElementById("game-history");
+  const entry = document.createElement("div");
+  entry.className = "log-entry";
+  if (type === "travel") {
+    entry.style.borderLeftColor = "#4fc3f7";
+  } else if (type === "puzzle") {
+    entry.style.borderLeftColor = "#fa0000";
+  } else if (type === "error") {
+    entry.style.borderLeftColor = "#e57373";
+  }
+  entry.textContent = message;
+  box.appendChild(entry);
+  box.scrollTop = box.scrollHeight;
+}
 currentLocation();
 airport_markers();
