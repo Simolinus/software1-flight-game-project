@@ -95,8 +95,7 @@ async function commercialTravel(airport) {
     currentView();
     addToHistory(`Traveled to ${airport[1]}, ${airport[0]}`, "travel");
     check_puzzle_piece(airport);
-    updatePlayer(window.money, window.score);
-    refreshPlayerUI();
+    await refreshPlayerUI();
     const event = new Event("playerUpdated");
     window.dispatchEvent(event);
   }
@@ -121,8 +120,7 @@ async function privateTravel(airport) {
     currentView();
     addToHistory(`Traveled to ${airport[1]}, ${airport[0]}`, "travel");
     check_puzzle_piece(airport);
-    updatePlayer(window.money, window.score);
-    refreshPlayerUI();
+    await refreshPlayerUI();
   }
   if (data.error) {
     addToHistory(data.error, "error");

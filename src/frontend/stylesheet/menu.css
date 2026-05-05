@@ -1,37 +1,38 @@
-body,
-html {
+html,
+body {
   margin: 0;
   height: 100%;
-  overflow: auto;
+  overflow: hidden;
 }
-#m-title {
-  background-color: darkorange;
-  text-align: center;
-  margin: 0;
-  width: 100%;
-  font-size: 30px;
-  height: 40px;
-  font-family: "Cinzel Decorative", serif;
-  font-weight: 700;
+
+main {
+  position: fixed;
+  inset: 0;
 }
 .m-b {
-  position: relative;
-  z-index: 1;
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  z-index: 1000;
+
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+
+  gap: 10px;
   pointer-events: none;
 }
+
 .m-b button,
 .m-b a,
-.m-b ul {
+.m-b ul,
+.m-b h5,
+.m-b div {
   pointer-events: auto;
 }
 #map {
-  position: fixed;
-  top: 40px;
-  left: 0;
-  width: 100vw;
-  height: calc(100vh - 40px);
-  border: none;
-  z-index: 0;
+  top: 0;
+  height: 100%;
 }
 ul {
   list-style-type: none;
