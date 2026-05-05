@@ -156,12 +156,13 @@ def travel():
 @app.route("/acquire-puzzle-piece", methods=["GET"])
 def aquire():
     connection = db.get_connection()
-    puzzle_piece = acquire_puzzle_piece(connection)
-    acquired = check_if_puzzle_piece_acquired(connection, puzzle_piece)
+    puzzle_piece = check_for_puzzle_piece(connection)
+    acquired = check_if_puzzle_piece_acquired(connection, puzzle_piece[0])
     if acquired == 0:
-        return json.dumps({"piece": f"puzzle_piece NO.{puzzle_piece} found"})
+        acquire_puzzle_piece(connection)
+        return json.dumps({"piece": f"puzzle_piece NO.{puzzle_piece[0]} found"})
     elif acquired == 1:
-        return json.dumps({"piece": f"puzzle_piece NO.{puzzle_piece} already acquired"})
+        return json.dumps({"piece": f"puzzle_piece NO.{puzzle_piece[0]} already acquired"})
     else:
         return json.dumps({"error": "Something went wrong"}), 400
 

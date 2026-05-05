@@ -200,15 +200,18 @@ def check_for_puzzle_piece(connection):
     return result
 
 def check_if_puzzle_piece_acquired(connection, piece):
-    sql = "SELECT airport.puzzle_piece, puzzle_pieces.acquired FROM airport, puzzle_pieces WHERE airport.puzzle_piece = %s"
+    print("piece value:", piece, type(piece))
+    sql = "SELECT puzzle_pieces.acquired FROM airport, puzzle_pieces WHERE airport.puzzle_piece = %s AND airport.puzzle_piece = puzzle_pieces.id"
     cursor = connection.cursor()
     cursor.execute(sql, (piece,))
-    result = cursor.fetchone()
+    result = cursor.fetchall()
     cursor.close()
-    if result == 0:
+    if not result:
         return 0
-    else:
+    if result[0][0]:
         return 1
+    else:
+        return 0
 
 
 def acquire_puzzle_piece(connection):
@@ -305,8 +308,8 @@ def puzzle_pieces_found(connection):
     puzzle_pieces_total = 0
     sql = "SELECT acquired FROM puzzle_pieces WHERE puzzle_pieces.acquired = '1'"
     cursor.execute(sql)
-    puzzle_pieces_aquired = cursor.fetchall()
-    for i in puzzle_pieces_aquired:
+    puzzle_pieces_acquired = cursor.fetchall()
+    for i in puzzle_pieces_acquired:
         puzzle_pieces_total += 1
     cursor.close()
     return puzzle_pieces_total
