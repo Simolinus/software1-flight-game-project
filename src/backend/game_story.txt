@@ -12,8 +12,3 @@ The document contained a message that read:
 Many people didn’t take it seriously and were afraid to take on this challenge.
 
 Inspired by the difficulty, a new explorer decided to take it on.
-
-Game rules:
-Objective: Collect 10 puzzle pieces.
-Earn score by completing the game fast, answering quizzes and collecting puzzle pieces.
-Earn money by answering quizzes.
