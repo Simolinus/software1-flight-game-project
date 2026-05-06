@@ -28,7 +28,7 @@ async function currentView() {
   let response = await fetch("http://127.0.0.1:3000/playerlocation");
   let airport = await response.json();
   map.flyTo([airport.latitude_deg, airport.longitude_deg], 15, {
-    duration: 3,
+    duration: 2,
   });
 }
 
@@ -121,6 +121,7 @@ async function privateTravel(airport) {
     addToHistory(`Traveled to ${airport[1]}, ${airport[0]}`, "travel");
     check_puzzle_piece(airport);
     await refreshPlayerUI();
+    const event = new Event("playerUpdated");
   }
   if (data.error) {
     addToHistory(data.error, "error");

@@ -31,7 +31,7 @@ export async function updatePlayer(money, score) {
   });
 
   const data = await res.json();
-  if(data.status == "success") {
+  if (data.status == "success") {
     refreshPlayerUI();
   }
 }
@@ -119,9 +119,12 @@ document.addEventListener("DOMContentLoaded", () => {
       alert("Congratulation!  Money: +100!  Score: +1");
       window.money += 100;
       window.score += 1;
+      answerInput.value = "";
+      getQuiz();
       updatePlayer(window.money, window.score);
     } else {
       alert("Wrong answer! Try again!");
+      answerInput.value = "";
     }
   });
 });
