@@ -122,6 +122,7 @@ async function privateTravel(airport) {
     check_puzzle_piece(airport);
     await refreshPlayerUI();
     const event = new Event("playerUpdated");
+    window.dispatchEvent(event);
   }
   if (data.error) {
     addToHistory(data.error, "error");
