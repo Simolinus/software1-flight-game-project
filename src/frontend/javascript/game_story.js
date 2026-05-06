@@ -5,10 +5,10 @@ async function newGame() {
   document.getElementById("n-game").style.display = "none";
   const response = await fetch("../../backend/game_story.txt");
   const text = await response.text();
-  typeWriter(text, "story-area", 20);
+  typeWriter(text, "story-area", 10);
 }
 
-function typeWriter(text, elementId, speed = 20) {
+function typeWriter(text, elementId, speed = 10) {
   const element = document.getElementById(elementId);
   element.textContent = " ";
   element.style.opacity = "1";
@@ -19,7 +19,7 @@ function typeWriter(text, elementId, speed = 20) {
       index++;
       setTimeout(type, speed);
     } else {
-        document.querySelector(".entername").style.visibility = "visible";
+      document.querySelector(".entername").style.visibility = "visible";
     }
   }
   type();
