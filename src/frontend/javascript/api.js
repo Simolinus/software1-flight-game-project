@@ -91,10 +91,9 @@ export async function refreshPlayerUI() {
   document.querySelector("#puzzle").textContent = count;
   document.querySelector("#location").textContent = p.location;
 
-  if (count >= 1) {
+  if (count >= 10) {
     window.location.href = "../pages/End.html";
-}
-
+  }
 }
 
 window.getQuiz = getQuiz;
