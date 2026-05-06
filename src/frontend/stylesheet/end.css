@@ -1,5 +1,5 @@
 body {
-  background-image: url("endpage.png");
+  background-image: url("./endpage.png");
   background-attachment: fixed;
   background-repeat: no-repeat;
   height: 100vh;
